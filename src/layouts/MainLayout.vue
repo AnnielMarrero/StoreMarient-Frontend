@@ -50,37 +50,44 @@ import { ref } from 'vue';
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 import { baseURL } from 'src/boot/axios';
 
+
 const essentialLinks: EssentialLinkProps[] = [
+  {
+    title: 'Inicio',
+    caption: 'inicio',
+    icon: 'home',
+    link: '/'
+  },
   {
     title: 'Productos',
     caption: 'productos',
     icon: 'school',
-    link: 'https://quasar.dev'
+    link: '/productos'
   },
   {
     title: 'Celulares',
     caption: 'celulares',
     icon: 'code',
-    link: 'https://github.com/quasarframework'
+    link: '/celulares'
   },
   {
     title: 'Micas',
     caption: 'micas',
     icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    link: '/micas'
   },
   {
     title: 'Covers',
     caption: 'covers',
     icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
+    link: '/covers'
+  }/*,
   {
     title: 'Reporte',
     caption: 'reporte',
     icon: 'rss_feed',
     link: `${baseURL}/Pdf/generate`
-  }
+  }*/
 ];
 
 const leftDrawerOpen = ref(false)

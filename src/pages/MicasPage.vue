@@ -2,24 +2,24 @@
   <div class="q-pa-md">
     <q-spinner v-if="loading" color="primary" size="3em" />
     <div v-if="!loading">
-      <h4>Productos</h4>
+      <h4>Micas</h4>
       <table>
       <thead>
         <tr>
-          <th>Categoria</th>
-          <th>Nombre</th>
+          <th>Telefono</th>
+          <th>Modelo</th>
           <th>Cantidad Actual</th>
           <th>Nueva Cantidad</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product.id">
-          <td>{{ product.category }}</td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.quantity }}</td>
+        <tr v-for="mica in micas" :key="mica.id">
+          <td>{{ mica.phoneType }}</td>
+          <td>{{ mica.model }}</td>
+          <td>{{ mica.quantity }}</td>
           <td>
             <q-input 
-              v-model="product.newQuantity" 
+              v-model="mica.newQuantity" 
               type="number" 
               outlined 
             />
@@ -64,29 +64,29 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar();
 
 
-interface Product {
-  name: string;
+interface Mica {
+  model: string;
   quantity: number;
-  categoryId: number;
-  category: string;
+  phoneTypeId: number;
+  phoneType: string;
   id: number;
   newQuantity: number;
 }
 
 
 const loading = ref(false);
-const products = ref<Product[]>([]);
+const micas = ref<Mica[]>([]);
 
 
 const getAll = async () => {
   try {
     loading.value = true; //use spinner
-    const resp = await api.get('products');
+    const resp = await api.get('micas');
     //console.log(resp)
-    products.value = resp.data;
-    //console.log(products.value);
+    micas.value = resp.data;
+    //console.log(micas.value);
   } catch (err: unknown) {
-    console.log("can't load products", err);
+    console.log("can't load micas", err);
   } finally {
     loading.value = false;
   }
@@ -96,21 +96,21 @@ const handleSave = async() => {
     // Extract only "name" and "price"
   const updateStock = [];
   
-  if(products.value) {
-    for (const product of products.value) {
+  if(micas.value) {
+    for (const mica of micas.value) {
       //console.log(item);
-      if(product.newQuantity >= 0){
-        updateStock.push({id: product.id, newQuantity: product.newQuantity});
+      if(mica.newQuantity >= 0){
+        updateStock.push({id: mica.id, newQuantity: mica.newQuantity});
       }
     }
   }
   
-  //console.log(updateStock, products.value);
+  //console.log(updateStock, micas.value);
   if(updateStock.length === 0) {
-    alert('Debe llenar al menos la infomracion de un producto para guardar');
+    alert('Debe llenar al menos la infomracion de un micao para guardar');
     return;
   }
-  const resp = await api.post('products', updateStock );
+  const resp = await api.post('micas', updateStock );
   $q.notify({
         type: 'positive',
         message: resp.data,

@@ -2,28 +2,32 @@
   <div class="q-pa-md">
     <q-spinner v-if="loading" color="primary" size="3em" />
     <div v-if="!loading">
-      <h4>Productos</h4>
+      <h4>Covers</h4>
       <table>
       <thead>
         <tr>
-          <th>Categoria</th>
-          <th>Nombre</th>
-          <th>Cantidad Actual</th>
+          <th>Telefono</th>
+          <th>Modelo</th>
+          <!-- 3 columns-->
+          <th>Tipo Cover</th>
+          <th>Cantidad</th>
           <th>Nueva Cantidad</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product.id">
-          <td>{{ product.category }}</td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.quantity }}</td>
+        <tr :style="{ backgroundColor: getRandomHexColor(index) }" v-for="(coverStock,index) in coverStocks" :key="coverStock.id">
+          <td>{{ coverStock.phoneType }}</td>
+          <td>{{ coverStock.model }}</td>
+          <td>{{ coverStock.coverType }}</td>
+          <td>{{ coverStock.quantity }}</td>
           <td>
             <q-input 
-              v-model="product.newQuantity" 
+              v-model="coverStock.newQuantity" 
               type="number" 
               outlined 
             />
           </td>
+          <v-if></v-if>
         </tr>
       </tbody>
     </table>
@@ -64,29 +68,30 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar();
 
 
-interface Product {
-  name: string;
-  quantity: number;
-  categoryId: number;
-  category: string;
+interface CoverStock {
+  model: string;
+  phoneTypeId: number;
+  phoneType: string;
   id: number;
+  quantity: number;
   newQuantity: number;
+  coverType: string;
 }
 
 
 const loading = ref(false);
-const products = ref<Product[]>([]);
-
+const coverStocks = ref<CoverStock[]>([]);
+//const string
 
 const getAll = async () => {
   try {
     loading.value = true; //use spinner
-    const resp = await api.get('products');
+    const resp = await api.get('CoverStocks');
     //console.log(resp)
-    products.value = resp.data;
-    //console.log(products.value);
+    coverStocks.value = resp.data;
+    //console.log(covers.value);
   } catch (err: unknown) {
-    console.log("can't load products", err);
+    console.log("can't load CoverStocks", err);
   } finally {
     loading.value = false;
   }
@@ -96,21 +101,21 @@ const handleSave = async() => {
     // Extract only "name" and "price"
   const updateStock = [];
   
-  if(products.value) {
-    for (const product of products.value) {
+  if(coverStocks.value) {
+    for (const coverStock of coverStocks.value) {
       //console.log(item);
-      if(product.newQuantity >= 0){
-        updateStock.push({id: product.id, newQuantity: product.newQuantity});
+      if(coverStock.newQuantity >= 0){
+        updateStock.push({id: coverStock.id, newQuantity: coverStock.newQuantity});
       }
     }
   }
   
-  //console.log(updateStock, products.value);
+  //console.log(updateStock, covers.value);
   if(updateStock.length === 0) {
-    alert('Debe llenar al menos la infomracion de un producto para guardar');
+    alert('Debe llenar al menos la infomracion de un coverstock para guardar');
     return;
   }
-  const resp = await api.post('products', updateStock );
+  const resp = await api.post('CoverStocks', updateStock );
   $q.notify({
         type: 'positive',
         message: resp.data,
@@ -119,6 +124,22 @@ const handleSave = async() => {
       });
   await getAll();
 };
+
+const c1 = '#84baed';
+const c2 = '#b4bcb1';
+let currColor = c1;
+function getRandomHexColor(index: number) : string{
+  
+  if(index %3 ===0 ) {
+    
+    if(currColor === c1) {
+      currColor = c2;
+    } else {
+      currColor = c1;
+    }
+  }
+  return currColor;
+}
 
 
 onMounted(async () => {

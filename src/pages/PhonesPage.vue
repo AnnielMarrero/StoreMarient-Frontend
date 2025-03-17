@@ -2,24 +2,24 @@
   <div class="q-pa-md">
     <q-spinner v-if="loading" color="primary" size="3em" />
     <div v-if="!loading">
-      <h4>Productos</h4>
+      <h4>Celulares</h4>
       <table>
       <thead>
         <tr>
-          <th>Categoria</th>
-          <th>Nombre</th>
-          <th>Cantidad Actual</th>
+          <th>Pieza</th>
+          <th>Modelo</th>
+          <th>Cantidad</th>
           <th>Nueva Cantidad</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product.id">
-          <td>{{ product.category }}</td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.quantity }}</td>
+        <tr v-for="phone in phones" :key="phone.id">
+          <td>{{ phone.piece }}</td>
+          <td>{{ phone.model }}</td>
+          <td>{{ phone.quantity }}</td>
           <td>
             <q-input 
-              v-model="product.newQuantity" 
+              v-model="phone.newQuantity" 
               type="number" 
               outlined 
             />
@@ -64,29 +64,29 @@ import { useQuasar } from 'quasar';
 const $q = useQuasar();
 
 
-interface Product {
-  name: string;
+interface Phone {
+  model: string;
   quantity: number;
-  categoryId: number;
-  category: string;
+  pieceId: number;
+  piece: string;
   id: number;
   newQuantity: number;
 }
 
 
 const loading = ref(false);
-const products = ref<Product[]>([]);
+const phones = ref<Phone[]>([]);
 
 
 const getAll = async () => {
   try {
     loading.value = true; //use spinner
-    const resp = await api.get('products');
+    const resp = await api.get('phones');
     //console.log(resp)
-    products.value = resp.data;
-    //console.log(products.value);
+    phones.value = resp.data;
+    //console.log(phones.value);
   } catch (err: unknown) {
-    console.log("can't load products", err);
+    console.log("can't load phones", err);
   } finally {
     loading.value = false;
   }
@@ -96,21 +96,21 @@ const handleSave = async() => {
     // Extract only "name" and "price"
   const updateStock = [];
   
-  if(products.value) {
-    for (const product of products.value) {
+  if(phones.value) {
+    for (const phone of phones.value) {
       //console.log(item);
-      if(product.newQuantity >= 0){
-        updateStock.push({id: product.id, newQuantity: product.newQuantity});
+      if(phone.newQuantity >= 0){
+        updateStock.push({id: phone.id, newQuantity: phone.newQuantity});
       }
     }
   }
   
-  //console.log(updateStock, products.value);
+  //console.log(updateStock, phones.value);
   if(updateStock.length === 0) {
-    alert('Debe llenar al menos la infomracion de un producto para guardar');
+    alert('Debe llenar al menos la infomracion de un celular para guardar');
     return;
   }
-  const resp = await api.post('products', updateStock );
+  const resp = await api.post('phones', updateStock );
   $q.notify({
         type: 'positive',
         message: resp.data,
