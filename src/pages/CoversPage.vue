@@ -21,7 +21,7 @@
           <td>{{ coverStock.coverType }}</td>
           <td>{{ coverStock.quantity }}</td>
           <td>
-            <input 
+            <input :style="{ backgroundColor: currColorRef }"
               v-model="coverStock.newQuantity" 
               type="number" 
             />
@@ -79,6 +79,7 @@ interface CoverStock {
 
 
 const loading = ref(false);
+const currColorRef = ref('');
 const coverStocks = ref<CoverStock[]>([]);
 //const string
 
@@ -137,6 +138,7 @@ function getRandomHexColor(index: number) : string{
       currColor = c1;
     }
   }
+  currColorRef.value = currColor;
   return currColor;
 }
 
