@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-spinner v-if="loading" color="primary" size="3em" />
     <div v-if="!loading">
-      <h4>Micas</h4>
+      <p>Micas</p>
       <table>
       <thead>
         <tr>
@@ -18,9 +18,8 @@
           <td>{{ mica.model }}</td>
           <td>{{ mica.quantity }}</td>
           <td>
-            <q-input 
+            <input 
               v-model="mica.newQuantity" 
-              type="number" 
               outlined 
             />
           </td>
@@ -51,7 +50,7 @@ thead {
 
 th, td {
   border: 1px solid black;
-  padding: 5px;
+  padding: 1px 5px 1px 5px ;
   text-align: left;
 }
 </style>

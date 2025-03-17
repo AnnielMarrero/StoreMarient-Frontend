@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-spinner v-if="loading" color="primary" size="3em" />
     <div v-if="!loading">
-      <h4>Covers</h4>
+      <p>Covers</p>
       <table>
       <thead>
         <tr>
@@ -21,10 +21,9 @@
           <td>{{ coverStock.coverType }}</td>
           <td>{{ coverStock.quantity }}</td>
           <td>
-            <q-input 
+            <input 
               v-model="coverStock.newQuantity" 
               type="number" 
-              outlined 
             />
           </td>
           <v-if></v-if>
@@ -55,7 +54,7 @@ thead {
 
 th, td {
   border: 1px solid black;
-  padding: 5px;
+  padding: 1px 5px 1px 5px ;
   text-align: left;
 }
 </style>
